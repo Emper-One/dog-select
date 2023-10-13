@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, ReactElement } from "react"
 import api from '../api/api'
 import DogCard from "./DogCard"
 import SelectBreeds from "./SelectBreeds"
 
-function Dashboard() {
+function Dashboard(): ReactElement {
   const [dog, setDog] = useState('')
   const [imageDog, setImageDog] = useState('')
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
+  // Get dog from name
   const getDog = async () => {
     try {
       setIsLoading(true)
@@ -25,8 +26,6 @@ function Dashboard() {
   const handleChange = async (item: string) => {
     setDog(item)
   } 
-
-  
 
   return (
     <div className="container mx-auto h-[100%]">
