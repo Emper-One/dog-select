@@ -1,4 +1,6 @@
 import { firstLetterUppercase } from "../utils/utils"
+import { useEffect, useState } from "react"
+import api from '../api/api'
 
 interface Props {
   image: string
@@ -8,9 +10,30 @@ interface Props {
 }
 
 function DogCard({image, dogName, handleChange, loading}: Props) {
+  const [randomDog, setRandomDog] = useState(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  
+  
+  const getDogs = async () => {
+    try {
+      setIsLoading(true)
+      const { data: { message } } = await api.getRandomDog()
+      setRandomDog(message)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getDogs() 
+  }, [])
+
   return (
     <div className="grid md:grid-cols-2 gap-4 m-1 text-center shadow-lg md:h-[500px] max-w-auto my-10 p-6 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700">
-      {image && <>
+      {image 
+      ?<>
         <div>
           <img className="rounded md:h-[450px]" src={image} alt="dog image" />
         </div>
@@ -25,6 +48,15 @@ function DogCard({image, dogName, handleChange, loading}: Props) {
             >Get new dog</button>
           </div>
         </div>  
+      </>
+      :<><div className="flex align-middle justify-center flex-col">
+          <p className="text-white text-4xl font-bold">Select one dog!</p>
+          <img className="rounded md:h-[400px]" src='/vite.svg' alt="dog image" />
+        </div>
+        <div className="flex align-middle justify-center flex-col">
+          <p onClick={getDogs} className="text-white text-4xl font-bold hover:text-gray-500 cursor-pointer mb-2">{isLoading ? 'Loading...' : 'Random Dog'}</p>
+          {randomDog && <img className="rounded md:h-[400px]" src={randomDog} alt="dog image" />}
+        </div>
       </>}
     </div>
   )

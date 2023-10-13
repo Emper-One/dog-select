@@ -11,7 +11,11 @@ const api = {
   async getSelectDog (name: string) {	
     const url = `/breed/${name}/images/random`
     return await apiClient.get(url)
+  },
+
+  async getRandomDog () {	
+    const url = `/breeds/image/random`
+    return await apiClient.get(url)
   }
 }
-
 export default api
